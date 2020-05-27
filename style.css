@@ -7,8 +7,8 @@
     border-spacing: 0px;
 }
 .sudoku .cell {
-    width: 2ch;
-    height: 2ch;
+    width: 1.2em;
+    height: 1.2em;
     text-align: center;
 }
 
@@ -31,8 +31,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    width: 2ch;
-    height: 2ch;
+    width: 1.2em;
+    height: 1.2em;
 }
 
 .sudoku .annotations {
@@ -47,8 +47,8 @@
     z-index: 1;
 }
 
-.sudoku .annotations .main-visible {
-    visibility: none;
+.sudoku .cell.main-visible .annotations {
+    visibility: hidden;
 }
 
 .sudoku .center {

@@ -36,5 +36,6 @@ function genTable(el) {
         table.appendChild(tr);
     }
     el.appendChild(table);
+    return new Board(table);
 }
 

@@ -118,12 +118,16 @@ class BoardCell {
 
     setupEvents() {
         this.cell.onmousedown = (e) => {
-            let current = this.selected;
             if (!e.ctrlKey) {
                 this.board.deselect();
             }
-            this.selected = !current;
-            this.updateSelection();
+            if (e.shiftKey && this.board.selectionStart) {
+                this.board.finishSelect(this);
+            } else {
+                this.board.selectionStart = this;
+                this.selected = !this.selected;
+                this.updateSelection();
+            }
             e.preventDefault();
         }
 
@@ -131,7 +135,7 @@ class BoardCell {
             if (e.buttons != 1) {
                 return;
             }
-            this.selected = !e.shiftKey;
+            this.selected = true;
             this.updateSelection();
             e.preventDefault();
         }
@@ -142,6 +146,7 @@ class Board {
     constructor(element) {
         let cells = [...element.getElementsByClassName('cell')];
         this.cells = [...Array(9)].map(_ => [...Array(9)]);
+        this.selectionStart = null;
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j] = (new BoardCell(cells.shift(), this, i, j))
@@ -163,5 +168,31 @@ class Board {
                 this.cells[i][j].deselect();
             }
         }
+    }
+
+    finishSelect(cell) {
+        let i_start = this.selectionStart.i;
+        let j_start = this.selectionStart.j;
+        let i_end = cell.i;
+        let j_end = cell.j;
+        if (i_start > i_end) {
+            let tmp = i_start;
+            i_start = i_end;
+            i_end = tmp;
+        }
+        if (j_start > j_end) {
+            let tmp = j_start;
+            j_start = j_end;
+            j_end = tmp;
+        }
+
+        for (let i = i_start; i <= i_end; i++) {
+            for (let j = j_start; j <= j_end; j++) {
+                this.cells[i][j].selected = true;
+                this.cells[i][j].updateSelection();
+            }
+        }
+
+        this.selectionStart = null;
     }
 }

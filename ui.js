@@ -56,7 +56,7 @@ function genKeyPad(el) {
         center.className = "center";
         center.innerHTML = i;
         let corner = document.createElement('div');
-        corner.className = `corner corner-1`;
+        corner.className = `corner corner-0`;
         corner.innerHTML = i;
         let main = document.createElement('div');
         main.className = "main";
@@ -78,6 +78,8 @@ function genKeyPad(el) {
     el.appendChild(clear);
     el.setAttribute("data-selected", "main");
 }
+
+const MODES = ["main", "center", "corner", "color"];
 
 class Buttons {
     constructor(container, board) {
@@ -112,7 +114,7 @@ class Buttons {
     changeMode(mode) {
         this.keypad.setAttribute("data-selected", mode);
         this.mode = mode;
-        for (let m of ["main", "center", "corner", "color"]) {
+        for (let m of MODES) {
             if (m == mode) {
                 this.$(`button-${m}`).classList.add("dark");
             } else {
@@ -123,5 +125,24 @@ class Buttons {
 
     key(n) {
         this.board.key(this.mode, n);
+    }
+
+    attachKeyboardEvent(el) {
+        el.onkeydown = (event) =>  {
+            window.e = event;
+            var key = event.key;
+            if (key == "Tab") {
+                for (let i = 0; i < MODES.length; i++) {
+                    if (MODES[i] == this.mode) {
+                        console.log(i);
+                        let newModeIdx = event.shiftKey? i - 1 : i + 1; 
+                        this.changeMode(MODES[(4 + newModeIdx) % 4]);
+                        e.preventDefault();
+                        return;
+                    }
+                }
+                
+            }
+        }
     }
 }

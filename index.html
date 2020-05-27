@@ -27,6 +27,7 @@
     window.SudokuBoard = genTable(document.getElementById('sudoku-container'));
     genKeyPad(document.getElementsByClassName('keypad')[0]);
     window.SudokuButtons = new Buttons(document.getElementById('controls-container'), SudokuBoard);
+    SudokuButtons.attachKeyboardEvent(document.body);
 </script>
 
 </body>

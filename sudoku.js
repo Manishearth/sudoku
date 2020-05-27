@@ -36,12 +36,14 @@ class Cell {
         this.center = new CellSet();
         this.corner = new CellSet();
         this.main = null;
+        this.color = 1;
     }
 
     copyFrom(other) {
         this.center.copyFrom(other.center);
         this.corner.copyFrom(other.corner);
         this.main = other.main;
+        this.color = other.color;
     }
 }
 
@@ -63,6 +65,7 @@ class BoardCell {
     constructor(element, board, i, j) {
         this.corner = [...element.getElementsByClassName('corner')];
         this.center = element.getElementsByClassName('center')[0];
+        this.container = element.getElementsByClassName('cell-container')[0];
         this.main = element.getElementsByClassName('main')[0];
         this.cell = element;
         this.selected = false;
@@ -77,6 +80,7 @@ class BoardCell {
         this.applyCorner(cell);
         this.applyCenter(cell);
         this.applyMain(cell);
+        this.applyColor(cell);
     }
 
     applyMain(cell) {
@@ -90,6 +94,10 @@ class BoardCell {
 
     applyCenter(cell) {
         this.center.innerHTML = [...cell.center].join('');
+    }
+
+    applyColor(cell) {
+        this.container.setAttribute("data-color", cell.color);
     }
 
     applyCorner(cell) {

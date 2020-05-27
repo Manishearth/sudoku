@@ -7,6 +7,7 @@
 .sudoku .cell, .sudoku {
     border: 1px solid black;
     border-spacing: 0px;
+    padding: 0;
 }
 
 .sudoku .cell {
@@ -15,8 +16,8 @@
     text-align: center;
 }
 
-.sudoku .cell.selected {
-    background-color: yellow;
+.sudoku .cell.selected .annotations {
+    background-color: rgba(30, 30, 30, 0.4);
 }
 
 .sudoku .cell:nth-child(3n) {
@@ -120,4 +121,35 @@
     top: 50%;
     right: var(--corner-padding);
     transform: translate(0, -50%);
+}
+
+.sudoku .cell-container {
+    background-color: hsla(calc(360 * (var(--color-index) - 2)/8), 70%, 70%);
+}
+.sudoku .cell-container[data-color="1"] {
+    background-color: white;
+}
+.sudoku .cell-container[data-color="2"] {
+    --color-index: 2;
+}
+.sudoku .cell-container[data-color="3"] {
+    --color-index: 3;
+}
+.sudoku .cell-container[data-color="4"] {
+    --color-index: 4;
+}
+.sudoku .cell-container[data-color="5"] {
+    --color-index: 5;
+}
+.sudoku .cell-container[data-color="6"] {
+    --color-index: 6;
+}
+.sudoku .cell-container[data-color="7"] {
+    --color-index: 7;
+}
+.sudoku .cell-container[data-color="8"] {
+    --color-index: 8;
+}
+.sudoku .cell-container[data-color="9"] {
+    --color-index: 9;
 }

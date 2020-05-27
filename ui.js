@@ -12,6 +12,8 @@ function genTable(el) {
 
             let container = document.createElement("div");
             container.className = "cell-container";
+            container.setAttribute("data-color", 1);
+            // container.setAttribute("data-color", (i + j) % 9 + 1);
 
             let anno = document.createElement('div');
             anno.className = "annotations";

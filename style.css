@@ -1,0 +1,116 @@
+.sudoku {
+    font-size:30px;
+}
+
+.sudoku .cell, .sudoku {
+    border: 1px solid black;
+    border-spacing: 0px;
+}
+.sudoku .cell {
+    width: 2ch;
+    height: 2ch;
+    text-align: center;
+}
+
+.sudoku .cell:nth-child(3n) {
+    border-right:2px solid black;
+}
+.sudoku .cell:nth-child(3n + 1) {
+    border-left: 2px solid black;
+}
+.sudoku .row:nth-child(3n) td {
+    border-bottom:2px solid black;
+}
+.sudoku .row:nth-child(3n + 1) td {
+    border-top:2px solid black;
+}
+
+.sudoku .cell-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 2ch;
+    height: 2ch;
+}
+
+.sudoku .annotations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    z-index: 1;
+}
+
+.sudoku .annotations .main-visible {
+    visibility: none;
+}
+
+.sudoku .center {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sudoku .main {
+    width: 100%;
+    z-index: 2;
+    height: 100%;
+    text-align: center;
+    z-index: 2;
+}
+
+.sudoku .corner {
+    position: absolute;
+    --corner-padding: 6%;
+}
+
+.sudoku .corner-0 {
+    left: var(--corner-padding);
+    top: var(--corner-padding);
+}
+
+.sudoku .corner-1 {
+    right: var(--corner-padding);
+    top: var(--corner-padding);
+}
+
+.sudoku .corner-2 {
+    left: var(--corner-padding);
+    bottom: var(--corner-padding);
+}
+
+.sudoku .corner-3 {
+    right: var(--corner-padding);
+    bottom: var(--corner-padding);
+}
+
+.sudoku .corner-4 {
+    left: 50%;
+    top: var(--corner-padding);
+    transform: translate(-50%, 0);
+}
+
+.sudoku .corner-5 {
+    left: 50%;
+    bottom: var(--corner-padding);
+    transform: translate(-50%, 0);
+}
+
+.sudoku .corner-6 {
+    top: 50%;
+    left: var(--corner-padding);
+    transform: translate(0, -50%);
+}
+
+.sudoku .corner-7 {
+    top: 50%;
+    right: var(--corner-padding);
+    transform: translate(0, -50%);
+}

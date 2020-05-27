@@ -141,7 +141,19 @@ class Buttons {
                         return;
                     }
                 }
-                
+            }
+            if (key == "Backspace" || key == "Delete") {
+                this.key(null);
+                e.preventDefault();
+                return;
+            }
+            let int = parseInt(key);
+            if (!Number.isNaN(int)) {
+                if (int > 0) {
+                    this.key(int);
+                    e.preventDefault();
+                    return;
+                }
             }
         }
     }

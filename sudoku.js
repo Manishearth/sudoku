@@ -118,7 +118,10 @@ class BoardCell {
 
     setupEvents() {
         this.cell.onmousedown = (e) => {
-            if (!e.ctrlKey) {
+            // on Macs, selection is done with the
+            // meta key. This key isn't exposed on windows
+            // or linux, so we just check for both.
+            if (!e.ctrlKey && !e.metaKey) {
                 this.board.deselect();
             }
             if (e.shiftKey && this.board.selectionStart) {

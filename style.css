@@ -1,10 +1,12 @@
 body {
     margin: 0;
+    font-family: sans-serif;
 }
 @media (min-width: 1000px) {
     #sudoku-container {
         --square-size: 54px;
-        padding: 40px;
+        padding-left: 40px;
+        padding-right: 40px;
     }
 }
 
@@ -13,13 +15,23 @@ body {
         /* we have 26px of border */
         --available-width: calc(100vw - 26px);
         --square-size: calc(var(--available-width) / 10);
-        padding: calc(var(--available-width) / 20);
+        --padding: calc(var(--available-width) / 20);
+        padding-left: var(--padding);
+        padding-right: var(--padding);
     }
 }
 
 #container {
     display: flex;
     flex-flow: row wrap;
+    padding-top: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+#controls-container {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #sudoku-container {
@@ -89,14 +101,14 @@ body {
     visibility: hidden;
 }
 
-.sudoku .center {
+.center {
     position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.sudoku .main {
+.main {
     width: 100%;
     z-index: 2;
     height: 100%;
@@ -107,82 +119,205 @@ body {
     z-index: 2;
 }
 
-.sudoku .corner {
+.corner {
     position: absolute;
     --corner-padding: 6%;
 }
 
-.sudoku .corner-0 {
+.corner-0 {
     left: var(--corner-padding);
     top: var(--corner-padding);
 }
 
-.sudoku .corner-1 {
+.corner-1 {
     right: var(--corner-padding);
     top: var(--corner-padding);
 }
 
-.sudoku .corner-2 {
+.corner-2 {
     left: var(--corner-padding);
     bottom: var(--corner-padding);
 }
 
-.sudoku .corner-3 {
+.corner-3 {
     right: var(--corner-padding);
     bottom: var(--corner-padding);
 }
 
-.sudoku .corner-4 {
+.corner-4 {
     left: 50%;
     top: var(--corner-padding);
     transform: translate(-50%, 0);
 }
 
-.sudoku .corner-5 {
+.corner-5 {
     left: 50%;
     bottom: var(--corner-padding);
     transform: translate(-50%, 0);
 }
 
-.sudoku .corner-6 {
+.corner-6 {
     top: 50%;
     left: var(--corner-padding);
     transform: translate(0, -50%);
 }
 
-.sudoku .corner-7 {
+.corner-7 {
     top: 50%;
     right: var(--corner-padding);
     transform: translate(0, -50%);
 }
 
-.sudoku .cell-container {
+.colored {
     background-color: hsla(calc(360 * (var(--color-index) - 2)/8), 70%, 70%);
 }
-.sudoku .cell-container[data-color="1"] {
+.colored[data-color="1"] {
     background-color: white;
 }
-.sudoku .cell-container[data-color="2"] {
+.colored[data-color="2"] {
     --color-index: 2;
 }
-.sudoku .cell-container[data-color="3"] {
+.colored[data-color="3"] {
     --color-index: 3;
 }
-.sudoku .cell-container[data-color="4"] {
+.colored[data-color="4"] {
     --color-index: 4;
 }
-.sudoku .cell-container[data-color="5"] {
+.colored[data-color="5"] {
     --color-index: 5;
 }
-.sudoku .cell-container[data-color="6"] {
+.colored[data-color="6"] {
     --color-index: 6;
 }
-.sudoku .cell-container[data-color="7"] {
+.colored[data-color="7"] {
     --color-index: 7;
 }
-.sudoku .cell-container[data-color="8"] {
+.colored[data-color="8"] {
     --color-index: 8;
 }
-.sudoku .cell-container[data-color="9"] {
+.colored[data-color="9"] {
     --color-index: 9;
+}
+
+#controls-container {
+    --button-height: 45px;
+    display: flex;
+    flex-direction: row;
+}
+
+#controls-container > div {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#modes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+#modes .button {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.button {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: calc(var(--button-height));
+    font-size: calc(var(--button-height) / 2);
+    font-weight: 400;
+    color: rgb(0, 40, 200);
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    margin-top: 7px;
+    margin-left: 7px;
+    cursor: pointer;
+}
+
+.button:not(.dark):hover {
+    background: rgba(0, 40, 200, 0.3);
+}
+
+.button.dark {
+    background: rgba(0, 40, 200, 1);
+    color: white;
+}
+
+.keypad {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--button-height) * 3 + 28px);
+}
+
+.keypad .cell-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--button-height);
+    height: var(--button-height);
+}
+
+.keypad .annotations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 0.5em;
+    z-index: 1;
+}
+.keypad .clearbutton {
+    flex-grow: 10;
+}
+
+.keypad .colored {
+    width: 70%;
+    height: 70%;
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    right: 15%;
+    bottom: 15%;
+    border-radius: 5px;
+}
+
+.keypad .corner {
+    display: none;
+}
+
+.keypad .center {
+    display: none;
+}
+
+.keypad .main {
+    display: none;
+}
+
+.keypad .colored {
+    display: none;
+}
+
+.keypad[data-selected="main"] .main {
+    display: flex;
+}
+
+.keypad[data-selected="center"] .center {
+    display: block;
+}
+
+.keypad[data-selected="corner"] .corner {
+    display: block;
+}
+
+.keypad[data-selected="color"] .colored {
+    display: block;
 }

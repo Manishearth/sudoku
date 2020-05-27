@@ -12,11 +12,21 @@
 <div id=container>
 <div id="sudoku-container"></div>
 <div id="controls-container">
-    
+    <div id=modes>
+        <div class="button dark button-main">Main</div>
+        <div class="button button-center">Center</div>
+        <div class="button button-corner">Corner</div>
+        <div class="button button-color">Color</div>
+    </div>
+    <div class=keypad>
+        
+    </div>
 </div>
 </div>
 <script type="text/javascript">
     window.SudokuBoard = genTable(document.getElementById('sudoku-container'));
+    genKeyPad(document.getElementsByClassName('keypad')[0]);
+    window.SudokuButtons = new Buttons(document.getElementById('controls-container'));
 </script>
 
 </body>

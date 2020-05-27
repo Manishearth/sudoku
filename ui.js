@@ -45,8 +45,7 @@ function genTable(el) {
 function genKeyPad(el) {
     for(let i=1; i<=9; i++) {
         let div = document.createElement("div");
-        div.className = "button dark";
-        div.id = `button-${i}`;
+        div.className = `button dark button-${i}`;
 
         let container = document.createElement("div");
         container.className = "cell-container";
@@ -82,11 +81,12 @@ function genKeyPad(el) {
 
 class Buttons {
     constructor(container, board) {
-        this.board = board
+        this.board = board;
         this.mode = "main";
         this.container = container;
         this.keypad = container.getElementsByClassName("keypad")[0];
         this.setupModes();
+        this.setupKeys();
     }
 
     setupModes() {
@@ -94,6 +94,15 @@ class Buttons {
         this.$("button-center").onclick = () => this.changeMode("center");
         this.$("button-corner").onclick = () => this.changeMode("corner");
         this.$("button-color").onclick = () => this.changeMode("color");
+    }
+
+    setupKeys() {
+        for(let i = 1; i <= 9; i++) {
+            let key = this.$(`button-${i}`);
+            key.onclick = () => this.key(i);
+        }
+
+        this.$('button-clear').onclick = () => this.key(null);
     }
 
     $(cl) {
@@ -110,5 +119,9 @@ class Buttons {
                 this.$(`button-${m}`).classList.remove("dark");
             }
         }
+    }
+
+    key(n) {
+        this.board.key(this.mode, n);
     }
 }

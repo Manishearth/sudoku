@@ -154,21 +154,83 @@ class BoardCell {
 }
 
 class Board {
-    constructor(element) {
+    constructor(element, state) {
+        if (!state) {
+            state = new State();
+        }
         let cells = [...element.getElementsByClassName('cell')];
         this.cells = [...Array(9)].map(_ => [...Array(9)]);
         this.selectionStart = null;
+        this.history = [];
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j] = (new BoardCell(cells.shift(), this, i, j))
             }
         }
+        this.apply(state);
+    }
+
+    saveState() {
+        if (this.currentState) {
+            let oldState = new State();
+            oldState.copyFrom(this.currentState);
+            this.history.push(oldState);
+        }
     }
 
     apply(state) {
+        this.saveState();
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j].apply(state.cells[i][j]);
+            }
+        }
+        this.currentState = state;
+    }
+
+    key(mode, n) {
+        this.saveState();
+        for (let cell of this.selected()) {
+            let stateCell = this.currentState.cells[cell.i][cell.j];
+            switch (mode) {
+                case "main":
+                    stateCell.main = n;
+                    cell.applyMain(stateCell);
+                    break;
+                case "corner":
+                    if (n) {
+                        stateCell.corner.toggle(n);
+                    } else {
+                        stateCell.corner = new CellSet();
+                    }
+                    cell.applyCorner(stateCell);
+
+                    break;
+                case "center":
+                    if (n) {
+                        stateCell.center.toggle(n);
+                    } else {
+                        stateCell.center = new CellSet();
+                    }
+                    cell.applyCenter(stateCell);
+
+                    break;
+                case "color":
+                    stateCell.color = n || 1;
+                    cell.applyColor(stateCell);
+
+                    break;
+            }
+        }
+    }
+
+    *selected() {
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                let cell = this.cells[i][j];
+                if (cell.selected) {
+                   yield cell; 
+                }
             }
         }
     }

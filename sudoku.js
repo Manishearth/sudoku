@@ -60,13 +60,17 @@ class State {
 }
 
 class BoardCell {
-    constructor(element, i, j) {
+    constructor(element, board, i, j) {
         this.corner = [...element.getElementsByClassName('corner')];
         this.center = element.getElementsByClassName('center')[0];
         this.main = element.getElementsByClassName('main')[0];
         this.cell = element;
+        this.selected = false;
+        element.cellObject = this;
         this.i = i;
         this.j = j;
+        this.board = board;
+        this.setupEvents();
     }
 
     apply(cell) {
@@ -98,6 +102,40 @@ class BoardCell {
             this.corner[0].innerHTML += corner[8];
         }
     }
+
+    deselect() {
+        this.selected = false;
+        this.updateSelection();
+    }
+
+    updateSelection() {
+        if (this.selected) {
+            this.cell.classList.add('selected');
+        } else {
+            this.cell.classList.remove('selected');
+        }
+    }
+
+    setupEvents() {
+        this.cell.onmousedown = (e) => {
+            let current = this.selected;
+            if (!e.ctrlKey) {
+                this.board.deselect();
+            }
+            this.selected = !current;
+            this.updateSelection();
+            e.preventDefault();
+        }
+
+        this.cell.onmouseenter = (e) => {
+            if (e.buttons != 1) {
+                return;
+            }
+            this.selected = !e.shiftKey;
+            this.updateSelection();
+            e.preventDefault();
+        }
+    }
 }
 
 class Board {
@@ -106,7 +144,7 @@ class Board {
         this.cells = [...Array(9)].map(_ => [...Array(9)]);
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
-                this.cells[i][j] = (new BoardCell(cells.shift(), i, j))
+                this.cells[i][j] = (new BoardCell(cells.shift(), this, i, j))
             }
         }
     }
@@ -115,6 +153,14 @@ class Board {
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j].apply(state.cells[i][j]);
+            }
+        }
+    }
+
+    deselect() {
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                this.cells[i][j].deselect();
             }
         }
     }

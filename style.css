@@ -1,15 +1,22 @@
 .sudoku {
     font-size:30px;
+    --square-size: 1.8em;
+    user-select: none;
 }
 
 .sudoku .cell, .sudoku {
     border: 1px solid black;
     border-spacing: 0px;
 }
+
 .sudoku .cell {
-    width: 1.2em;
-    height: 1.2em;
+    width: var(--square-size);
+    height: var(--square-size);
     text-align: center;
+}
+
+.sudoku .cell.selected {
+    background-color: yellow;
 }
 
 .sudoku .cell:nth-child(3n) {
@@ -31,8 +38,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    width: 1.2em;
-    height: 1.2em;
+    width: var(--square-size);
+    height: var(--square-size);
 }
 
 .sudoku .annotations {

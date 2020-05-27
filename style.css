@@ -1,8 +1,38 @@
-.sudoku {
-    font-size:30px;
-    --square-size: 1.8em;
-    user-select: none;
+body {
+    margin: 0;
 }
+@media (min-width: 1000px) {
+    #sudoku-container {
+        --square-size: 54px;
+        padding: 40px;
+    }
+}
+
+@media (max-width: 1000px) {
+    #sudoku-container {
+        /* we have 26px of border */
+        --available-width: calc(100vw - 26px);
+        --square-size: calc(var(--available-width) / 10);
+        padding: calc(var(--available-width) / 20);
+    }
+}
+
+#container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+#sudoku-container {
+    display: inline-flex;
+}
+
+.sudoku {
+    user-select: none;
+    --text-size: calc(var(--square-size) / 1.8);
+    --anno-size: calc(var(--text-size) / 3);
+    font-size: var(--text-size);
+}
+
 
 .sudoku .cell, .sudoku {
     border: 1px solid black;
@@ -51,7 +81,7 @@
     bottom: 0;
     width: 100%;
     height: 100%;
-    font-size: 10px;
+    font-size: var(--anno-size);
     z-index: 1;
 }
 
@@ -71,6 +101,9 @@
     z-index: 2;
     height: 100%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 2;
 }
 

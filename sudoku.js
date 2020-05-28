@@ -27,6 +27,17 @@ class CellSet {
     set(n, value) {
         this.set[n - 1] = value;
     }
+
+    serialize() {
+        return [...this];
+    }
+
+    static deserialize(obj) {
+        set = new CellSet();
+        for (i of obj) {
+            set[i] = true;
+        }
+    }
 }
 
 class Cell {
@@ -49,7 +60,9 @@ class Cell {
 
     setMain(n) {
         if (!this.frozen) {
-            this.main = n
+            this.main = n;
+            this.toggleCorner(null);
+            this.toggleCenter(null);
         }
     }
     setColor(n) {
@@ -71,6 +84,59 @@ class Cell {
             } else {
                 this.center = new CellSet();
             }
+        }
+    }
+
+    serialize() {
+        let obj = {
+            "i": this.i,
+            "j": this.j,
+        };
+        let changed = false;
+        if (this.main) {
+            changed = true;
+            obj.m = this.main;
+            if (this.frozen) {
+                obj.f = true;
+            }
+        }
+
+        if (this.color != 1) {
+            changed = true;
+            obj.color = this.color;
+        }
+        if (!this.main) {
+            let center = this.center.serialize();
+            if (center.length > 0) {
+                changed = true;
+                obj.center = center;
+            }
+            let corner = this.corner.serialize();
+            if (corner.length > 0) {
+                changed = true;
+                obj.corner = corner;
+            }
+        }
+
+        if (changed) {
+            return obj;
+        } else {
+            return null;
+        }
+    }
+
+    static deserialize(obj) {
+        let cell = new Cell();
+        cell.i = obj.i;
+        cell.j = obj.j;
+        cell.main = obj.m || null;
+        cell.frozen = obj.f || false;
+        cell.color = obj.color || null;
+        if (obj.center) {
+            cell.center = CellSet.deserialize(obj.center);
+        }
+        if (obj.corner) {
+            cell.corner = CellSet.deserialize(obj.corner);
         }
     }
 }
@@ -95,6 +161,30 @@ class State {
                 }
             }
         }
+    }
+
+    serialize() {
+        let obj = [];
+
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                let cell = this.cells[i][j].serialize();
+                if (cell) {
+                    obj.push(cell);
+                }
+            }
+        }
+        return obj;
+    }
+
+    static deserialize(obj) {
+        let s = new State();
+        for (let cell of obj) {
+            let i = cell.i;
+            let j = cell.j;
+            s.cells[i][j] = Cell.deserialize(cell);
+        }
+        return s;
     }
 }
 

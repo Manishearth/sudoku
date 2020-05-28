@@ -209,14 +209,14 @@ body {
     margin-left: 10px;
     margin-right: 10px;
 }
-#modes {
+.modes {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: space-between;
 }
 
-#modes .button {
+.modes .button {
     padding-left: 30px;
     padding-right: 30px;
 }

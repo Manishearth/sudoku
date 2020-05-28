@@ -196,6 +196,14 @@ class State {
         }
         return s;
     }
+
+    static deserialize_str(str) {
+        let obj;
+        if (obj = JSON.parse(str)) {
+            return State.deserialize(obj)
+        }
+        return null;
+    }
 }
 
 class BoardCell {
@@ -323,6 +331,10 @@ class Board {
         this.stateIndex += 1;
     }
 
+    updateLocalStorage() {
+        localStorage.lastState = JSON.stringify(this.currentState().serialize());
+    }
+
     undo() {
         if (this.stateIndex > 0) {
             this.stateIndex -= 1;
@@ -351,6 +363,7 @@ class Board {
     apply(state) {
         this.saveState(state);
         this.applyInner(state);
+        this.updateLocalStorage();
     }
 
     applyInner(state) {
@@ -389,6 +402,7 @@ class Board {
                     break;
             }
         }
+        this.updateLocalStorage();
     }
 
     moveSelection(i, j) {

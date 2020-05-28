@@ -31,11 +31,24 @@
 </div>
 </div>
 <script type="text/javascript">
-    let init;
+    let init, board, storage, s;
     let params = new URLSearchParams(window.location.search);
     if (board = params.get("board")) {
-        init = State.deserialize(JSON.parse(atob(board)));
-    } else {
+        if (s = State.deserialize_str(atob(board))) {
+            init = s;
+        } else {
+            alert("Invalid board string");
+        }
+    } else if (params.has("resume")) {
+        if (storage = localStorage.lastState) {
+            if (s = State.deserialize_str(storage)) {
+                init = s;
+            } else {
+                alert("Invalid board string in local storage");
+            }
+        }
+    }
+    if (!init) {
         init = new State();
     }
     window.SudokuBoard = genTable(document.getElementById('sudoku-container'), init);

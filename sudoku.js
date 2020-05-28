@@ -12,7 +12,7 @@ class CellSet {
     }
 
     copyFrom(other) {
-        this.set = [...other.set]
+        this.set = [...other.set];
     }
 
     get(n) {
@@ -56,6 +56,7 @@ class Cell {
         this.corner.copyFrom(other.corner);
         this.main = other.main;
         this.color = other.color;
+        this.frozen = other.frozen;
     }
 
     setMain(n) {
@@ -84,6 +85,15 @@ class Cell {
             } else {
                 this.center = new CellSet();
             }
+        }
+    }
+
+    freeze() {
+        this.corner = new CellSet();
+        this.center = new CellSet();
+        this.color = 1;
+        if (this.main) {
+            this.frozen = true;
         }
     }
 
@@ -138,6 +148,7 @@ class Cell {
         if (obj.corner) {
             cell.corner = CellSet.deserialize(obj.corner);
         }
+        return cell;
     }
 }
 
@@ -150,15 +161,6 @@ class State {
         for (let i=0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j].copyFrom(other.cells[i][j]);
-            }
-        }
-    }
-    freezeCells() {
-        for (let i = 0; i < 9; i++) {
-            for (let j = 0; j < 9; j++) {
-                if (this.cells[i][j].main) {
-                    this.cells[i][j].frozen = true;
-                }
             }
         }
     }
@@ -175,6 +177,14 @@ class State {
             }
         }
         return obj;
+    }
+
+    freeze() {
+        for (let i=0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                this.cells[i][j].freeze();
+            }
+        }
     }
 
     static deserialize(obj) {
@@ -243,6 +253,11 @@ class BoardCell {
         this.updateSelection();
     }
 
+    select() {
+        this.selected = true;
+        this.updateSelection();
+    }
+
     updateSelection() {
         if (this.selected) {
             this.cell.classList.add('selected');
@@ -266,6 +281,7 @@ class BoardCell {
                 this.selected = !this.selected;
                 this.updateSelection();
             }
+            this.board.lastSelected = this;
             e.preventDefault();
         }
 
@@ -274,6 +290,7 @@ class BoardCell {
                 return;
             }
             this.selected = true;
+            this.board.lastSelected = this;
             this.updateSelection();
             e.preventDefault();
         }
@@ -294,31 +311,62 @@ class Board {
                 this.cells[i][j] = (new BoardCell(cells.shift(), this, i, j))
             }
         }
+        this.stateIndex = -1;
         this.apply(state);
+        this.lastSelected = null;
     }
 
-    saveState() {
-        if (this.currentState) {
-            let oldState = new State();
-            oldState.copyFrom(this.currentState);
-            this.history.push(oldState);
+    saveState(newState) {
+        // truncate history to now
+        this.history = this.history.slice(0, this.stateIndex + 1);
+        this.history.push(newState);
+        this.stateIndex += 1;
+    }
+
+    undo() {
+        if (this.stateIndex > 0) {
+            this.stateIndex -= 1;
+            this.applyInner(this.currentState());
         }
     }
 
+    redo() {
+        if (this.stateIndex < this.history.length - 1) {
+            this.stateIndex += 1;
+            this.applyInner(this.currentState());
+        }
+    }
+
+    export() {
+        let s = new State();
+        s.copyFrom(this.currentState());
+        s.freeze();
+        window.open("?board=" + btoa(JSON.stringify(s.serialize())), "_blank");
+    }
+
+    currentState() {
+        return this.history[this.stateIndex];
+    }
+
     apply(state) {
-        this.saveState();
+        this.saveState(state);
+        this.applyInner(state);
+    }
+
+    applyInner(state) {
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j].apply(state.cells[i][j]);
             }
         }
-        this.currentState = state;
     }
 
     key(mode, n) {
-        this.saveState();
+        let newState = new State();
+        newState.copyFrom(this.currentState());
+        this.saveState(newState);
         for (let cell of this.selected()) {
-            let stateCell = this.currentState.cells[cell.i][cell.j];
+            let stateCell = newState.cells[cell.i][cell.j];
             switch (mode) {
                 case "main":
                     stateCell.setMain(n);
@@ -341,6 +389,20 @@ class Board {
                     break;
             }
         }
+    }
+
+    moveSelection(i, j) {
+        if (!this.lastSelected) {
+            return;
+        }
+        this.deselect();
+        let i2 = this.lastSelected.i + i;
+        let j2 = this.lastSelected.j + j;
+        if (i2 < 0 || j2 < 0 || i2 > 8 || j2 > 8) {
+            return;
+        }
+        this.cells[i2][j2].select();
+        this.lastSelected = this.cells[i2][j2];
     }
 
     *selected() {

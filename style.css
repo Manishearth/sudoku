@@ -19,6 +19,9 @@ body {
         padding-left: var(--padding);
         padding-right: var(--padding);
     }
+    #controls-container {
+        margin-top: 30px;
+    }
 }
 
 #container {
@@ -217,6 +220,17 @@ body {
 }
 
 .modes .button {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.buttons-other {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.buttons-other .button {
     padding-left: 30px;
     padding-right: 30px;
 }

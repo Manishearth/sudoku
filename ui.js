@@ -89,8 +89,14 @@ class Buttons {
         this.keypad = container.getElementsByClassName("keypad")[0];
         this.setupModes();
         this.setupKeys();
+        this.setupOthers();
     }
 
+    setupOthers() {
+        this.$('button-undo').onclick = () => this.board.undo();
+        this.$('button-redo').onclick = () => this.board.redo();
+        this.$('button-export').onclick = () => this.board.export();
+    }
     setupModes() {
         this.$("button-main").onclick = () => this.changeMode("main");
         this.$("button-center").onclick = () => this.changeMode("center");
@@ -129,7 +135,6 @@ class Buttons {
 
     attachKeyboardEvent(el) {
         el.onkeydown = (event) =>  {
-            window.e = event;
             var key = event.key;
             if (key == "Tab") {
                 for (let i = 0; i < MODES.length; i++) {
@@ -137,7 +142,7 @@ class Buttons {
                         console.log(i);
                         let newModeIdx = event.shiftKey? i - 1 : i + 1; 
                         this.changeMode(MODES[(4 + newModeIdx) % 4]);
-                        e.preventDefault();
+                        event.preventDefault();
                         return;
                     }
                 }
@@ -154,6 +159,20 @@ class Buttons {
                     e.preventDefault();
                     return;
                 }
+            }
+
+            if (key == "ArrowLeft") {
+                this.board.moveSelection(0, -1);
+                e.preventDefault();
+            } else if (key == "ArrowRight") {
+                this.board.moveSelection(0, 1);
+                e.preventDefault();
+            } else if (key == "ArrowUp") {
+                this.board.moveSelection(-1, 0);
+                e.preventDefault();
+            } else if (key == "ArrowDown") {
+                this.board.moveSelection(1, 0);
+                e.preventDefault();
             }
         }
     }

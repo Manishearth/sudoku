@@ -30,13 +30,14 @@ class CellSet {
 }
 
 class Cell {
-    constructor(i, j) {
+    constructor(i, j, presets) {
         this.i = i;
         this.j = j;
         this.center = new CellSet();
         this.corner = new CellSet();
         this.main = null;
         this.color = 1;
+        this.frozen = false;
     }
 
     copyFrom(other) {
@@ -45,10 +46,37 @@ class Cell {
         this.main = other.main;
         this.color = other.color;
     }
+
+    setMain(n) {
+        if (!this.frozen) {
+            this.main = n
+        }
+    }
+    setColor(n) {
+        this.color = n || 1;
+    }
+    toggleCorner(n) {
+        if (!this.frozen) {
+            if (n) {
+                this.corner.toggle(n);
+            } else {
+                this.corner = new CellSet();
+            }
+        }
+    }
+    toggleCenter(n) {
+        if (!this.frozen) {
+            if (n) {
+                this.center.toggle(n);
+            } else {
+                this.center = new CellSet();
+            }
+        }
+    }
 }
 
 class State {
-    constructor() {
+    constructor(presets) {
          this.cells = [...Array(9)].map((_, i) => [...Array(9)].map((_, j) => new Cell(i, j)));
     }
 
@@ -56,6 +84,15 @@ class State {
         for (let i=0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 this.cells[i][j].copyFrom(other.cells[i][j]);
+            }
+        }
+    }
+    freezeCells() {
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (this.cells[i][j].main) {
+                    this.cells[i][j].frozen = true;
+                }
             }
         }
     }
@@ -194,29 +231,21 @@ class Board {
             let stateCell = this.currentState.cells[cell.i][cell.j];
             switch (mode) {
                 case "main":
-                    stateCell.main = n;
+                    stateCell.setMain(n);
                     cell.applyMain(stateCell);
                     break;
                 case "corner":
-                    if (n) {
-                        stateCell.corner.toggle(n);
-                    } else {
-                        stateCell.corner = new CellSet();
-                    }
+                    stateCell.toggleCorner(n);
                     cell.applyCorner(stateCell);
 
                     break;
                 case "center":
-                    if (n) {
-                        stateCell.center.toggle(n);
-                    } else {
-                        stateCell.center = new CellSet();
-                    }
+                    stateCell.toggleCenter(n);
                     cell.applyCenter(stateCell);
 
                     break;
                 case "color":
-                    stateCell.color = n || 1;
+                    stateCell.setColor(n);
                     cell.applyColor(stateCell);
 
                     break;

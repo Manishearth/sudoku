@@ -1,4 +1,4 @@
-function genTable(el) {
+function genTable(el, init) {
 
     let table = document.createElement('table');
     table.className = "sudoku";
@@ -38,7 +38,7 @@ function genTable(el) {
         table.appendChild(tr);
     }
     el.appendChild(table);
-    return new Board(table);
+    return new Board(table, init);
 }
 
 

@@ -24,7 +24,11 @@
 </div>
 </div>
 <script type="text/javascript">
-    window.SudokuBoard = genTable(document.getElementById('sudoku-container'));
+    let init = new State();
+    init.cells[1][2].main = 5;
+    init.cells[3][4].main = 7;
+    init.freezeCells();
+    window.SudokuBoard = genTable(document.getElementById('sudoku-container'), init);
     genKeyPad(document.getElementsByClassName('keypad')[0]);
     window.SudokuButtons = new Buttons(document.getElementById('controls-container'), SudokuBoard);
     SudokuButtons.attachKeyboardEvent(document.body);

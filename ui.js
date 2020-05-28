@@ -96,6 +96,8 @@ class Buttons {
         this.$('button-undo').onclick = () => this.board.undo();
         this.$('button-redo').onclick = () => this.board.redo();
         this.$('button-export').onclick = () => this.board.export();
+        this.$('button-help').onclick = () => this.$("help-dialog").classList.add("visible");
+        this.$('dialog-close').onclick = () => this.$("help-dialog").classList.remove("visible");
     }
     setupModes() {
         this.$("button-main").onclick = () => this.changeMode("main");

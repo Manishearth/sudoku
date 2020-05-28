@@ -335,3 +335,51 @@ body {
 .keypad[data-selected="color"] .colored {
     display: block;
 }
+
+
+.help-dialog {
+    position: absolute;
+    z-index: 10;
+    border: 2px solid black;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: 10%;
+    padding: 10%;
+    background-color: white;
+    display: none;
+    font-size: 20px; 
+}
+
+.help-dialog.visible {
+    display: block;
+}
+
+.help-dialog .button-help {
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 5px; 
+    font-weight: 400;
+    color: rgb(0, 40, 200);
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 0.8em;
+}
+
+.dialog-close {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    cursor: pointer;
+}
+
+kbd kbd {
+    background-color: #d3d3d3;
+    border-radius: 3px;
+    border: 1px solid black;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
+    font-weight: 500px;
+    padding: 3px;
+}

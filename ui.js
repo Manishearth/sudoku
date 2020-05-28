@@ -96,6 +96,9 @@ class Buttons {
         this.$('button-undo').onclick = () => this.board.undo();
         this.$('button-redo').onclick = () => this.board.redo();
         this.$('button-export').onclick = () => this.board.export();
+        this.$('button-share').onclick = () => this.board.share();
+        this.$('button-reset').onclick = () => this.board.reset();
+        this.$('button-select-confirmed').onclick = () => this.toggleSelectConfirmed();
         this.$('button-help').onclick = () => this.$("help-dialog").classList.add("visible");
         this.$('dialog-close').onclick = () => this.$("help-dialog").classList.remove("visible");
     }
@@ -104,6 +107,15 @@ class Buttons {
         this.$("button-center").onclick = () => this.changeMode("center");
         this.$("button-corner").onclick = () => this.changeMode("corner");
         this.$("button-color").onclick = () => this.changeMode("color");
+    }
+
+    toggleSelectConfirmed() {
+        this.board.selectConfirmed = !this.board.selectConfirmed;
+        if (this.board.selectConfirmed) {
+            this.$('button-select-confirmed').classList.add("dark");
+        } else {
+            this.$('button-select-confirmed').classList.remove("dark");
+        }
     }
 
     setupKeys() {
@@ -141,7 +153,6 @@ class Buttons {
             if (key == "Tab") {
                 for (let i = 0; i < MODES.length; i++) {
                     if (MODES[i] == this.mode) {
-                        console.log(i);
                         let newModeIdx = event.shiftKey? i - 1 : i + 1; 
                         this.changeMode(MODES[(4 + newModeIdx) % 4]);
                         event.preventDefault();
@@ -151,30 +162,30 @@ class Buttons {
             }
             if (key == "Backspace" || key == "Delete") {
                 this.key(null);
-                e.preventDefault();
+                event.preventDefault();
                 return;
             }
             let int = parseInt(key);
             if (!Number.isNaN(int)) {
                 if (int > 0) {
                     this.key(int);
-                    e.preventDefault();
+                    event.preventDefault();
                     return;
                 }
             }
 
             if (key == "ArrowLeft") {
                 this.board.moveSelection(0, -1);
-                e.preventDefault();
+                event.preventDefault();
             } else if (key == "ArrowRight") {
                 this.board.moveSelection(0, 1);
-                e.preventDefault();
+                event.preventDefault();
             } else if (key == "ArrowUp") {
                 this.board.moveSelection(-1, 0);
-                e.preventDefault();
+                event.preventDefault();
             } else if (key == "ArrowDown") {
                 this.board.moveSelection(1, 0);
-                e.preventDefault();
+                event.preventDefault();
             }
         }
     }

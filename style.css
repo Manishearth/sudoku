@@ -1,3 +1,8 @@
+.selectconfirmed {
+    /* secret feature, hidden because it's mostly not useful */
+    display: none !important;
+}
+
 body {
     margin: 0;
     font-family: sans-serif;
@@ -205,12 +210,16 @@ body {
 #controls-container {
     --button-height: 45px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
-#controls-container > div {
+.main-controls > div {
     margin-left: 10px;
     margin-right: 10px;
+}
+.main-controls {
+    display: flex;
+    flex-direction: row;
 }
 .modes {
     display: flex;
@@ -225,14 +234,24 @@ body {
 }
 .buttons-other {
     display: flex;
-    flex-direction: column;
+    flex-flow: column;
     align-items: stretch;
     justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.buttons-other-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: stretch;
 }
 
 .buttons-other .button {
     padding-left: 30px;
     padding-right: 30px;
+    flex: 1;
 }
 
 .button {
@@ -344,7 +363,6 @@ body {
     left: 10%;
     right: 10%;
     top: 10%;
-    bottom: 10%;
     padding: 10%;
     background-color: white;
     display: none;

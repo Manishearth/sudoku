@@ -33,10 +33,11 @@ class CellSet {
     }
 
     static deserialize(obj) {
-        set = new CellSet();
-        for (i of obj) {
+        let set = new CellSet();
+        for (let i of obj) {
             set[i] = true;
         }
+        return set;
     }
 }
 
@@ -230,6 +231,7 @@ class BoardCell {
 
     applyMain(cell) {
         this.main.innerHTML = cell.main || "";
+        this.mainValue = cell.main;
         if (cell.main) {
             this.cell.classList.add("main-visible");
         } else {
@@ -238,6 +240,7 @@ class BoardCell {
     }
 
     applyCenter(cell) {
+
         this.center.innerHTML = [...cell.center].join('');
     }
 
@@ -261,9 +264,13 @@ class BoardCell {
         this.updateSelection();
     }
 
-    select() {
-        this.selected = true;
-        this.updateSelection();
+    select(allowConfirmed) {
+        console.log(this.cell.main, allowConfirmed);
+        if (!this.mainValue || allowConfirmed) {
+            this.selected = true;
+            this.board.lastSelected = this;
+            this.updateSelection();
+        }
     }
 
     updateSelection() {
@@ -286,10 +293,13 @@ class BoardCell {
                 this.board.finishSelect(this);
             } else {
                 this.board.selectionStart = this;
-                this.selected = !this.selected;
-                this.updateSelection();
+                if (this.selected) {
+                    this.selected = false;
+                    this.updateSelection();
+                } else {
+                    this.select(true);
+                }
             }
-            this.board.lastSelected = this;
             e.preventDefault();
         }
 
@@ -297,9 +307,7 @@ class BoardCell {
             if (e.buttons != 1) {
                 return;
             }
-            this.selected = true;
-            this.board.lastSelected = this;
-            this.updateSelection();
+            this.select(this.board.selectConfirmed);
             e.preventDefault();
         }
     }
@@ -321,6 +329,7 @@ class Board {
         }
         this.stateIndex = -1;
         this.apply(state);
+        this.selectConfirmed = true;
         this.lastSelected = null;
     }
 
@@ -353,6 +362,25 @@ class Board {
         let s = new State();
         s.copyFrom(this.currentState());
         s.freeze();
+        window.open("?board=" + btoa(JSON.stringify(s.serialize())), "_blank");
+    }
+
+    reset() {
+        let s = new State();
+        s.copyFrom(this.currentState());
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (!s.cells[i][j].frozen) {
+                    s.cells[i][j] = new Cell();
+                }
+            }
+        }
+        this.apply(s);
+    }
+
+    share() {
+        let s = new State();
+        s.copyFrom(this.currentState());
         window.open("?board=" + btoa(JSON.stringify(s.serialize())), "_blank");
     }
 
@@ -415,8 +443,7 @@ class Board {
         if (i2 < 0 || j2 < 0 || i2 > 8 || j2 > 8) {
             return;
         }
-        this.cells[i2][j2].select();
-        this.lastSelected = this.cells[i2][j2];
+        this.cells[i2][j2].select(true);
     }
 
     *selected() {
@@ -456,8 +483,7 @@ class Board {
 
         for (let i = i_start; i <= i_end; i++) {
             for (let j = j_start; j <= j_end; j++) {
-                this.cells[i][j].selected = true;
-                this.cells[i][j].updateSelection();
+                this.cells[i][j].select(this.selectConfirmed);
             }
         }
 

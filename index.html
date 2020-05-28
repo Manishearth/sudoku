@@ -12,21 +12,36 @@
 <div id=container>
 <div id="sudoku-container"></div>
 <div id="controls-container">
-    <div class=modes>
-        <div class="button dark button-main">Main</div>
-        <div class="button button-center">Center</div>
-        <div class="button button-corner">Corner</div>
-        <div class="button button-color">Color</div>
-    </div>
-    <div class=keypad>
-        
+    <div class=main-controls>
+        <div class=modes>
+            <div class="button dark button-main">Main</div>
+            <div class="button button-center">Center</div>
+            <div class="button button-corner">Corner</div>
+            <div class="button button-color">Color</div>
+        </div>
+        <div class=keypad>
+            
+        </div>
     </div>
 
     <div class="buttons-other">
-        <div class="button button-undo">Undo</div>
-        <div class="button button-redo">Redo</div>
-        <div class="button button-help">Help</div>
-        <div class="button button-export">Export</div>
+        <div class=buttons-other-row>
+            <div class="button button-undo">Undo</div>
+            <div class="button button-redo">Redo</div>
+        </div>
+        <div class=buttons-other-row>
+            <div class="button button-help">Help</div>
+            <div class="button button-reset">Reset</div>
+        </div>
+        <div class="buttons-other-row selectconfirmed">
+            <div class="button button-select-confirmed dark">Select confirmed</div>
+        </div>
+        <div class=buttons-other-row>
+            <div class="button button-share">Share current state</div>
+        </div>
+        <div class=buttons-other-row>
+            <div class="button button-export">Export as problem</div>
+        </div>
     </div>
 
     <div class="help-dialog">
@@ -34,13 +49,19 @@
 
 
         <p>You can use the keyboard to enter numbers, the arrow keys to move around,
-            and <kbd><kbd>Tab</kbd></kbd>/<kbd><kbd>Shift</kbd></kbd>+<kbd><kbd>Tab</kbd></kbd> to switch modes.
+            and <kbd><kbd>Tab</kbd></kbd>/<kbd><kbd>Shift</kbd></kbd>+<kbd><kbd>Tab</kbd></kbd> to switch modes. <kbd><kbd>Backspace</kbd></kbd> and <kbd><kbd>Delete</kbd></kbd>
+            can clear all values in a cell for the current mode.
 
         <p>Use the <span class=button-help>Center</span> mode for entering numbers that the cell is restricted to.
             Use the <span class=button-help>Corner</span> mode for noting which cells a given number is restricted to.
             The <span class=button-help>Color</span> mode can be used for additional annotations.
 
-        <p>You can export the current state of the board as a new problem using the <span class=button-help>Export</span> button.
+        <p>You can export the full current state of the board using the <span class=button-help>Share current state</span> button.
+            This will export all annotations but not any undo history.
+        <p>You can export the current state of the board as a new problem using the <span class=button-help>Export as problem</span> button.
+            This will not export any annotations.
+        <p>The <span class=button-help>Reset</span> button will reset things back to the original problem state.
+        <p class="selectconfirmed">The <span class=button-help>Select confirmed</span> toggle will allow you to select cells which have "confirmed" (i.e. "main") answers.
 
 
     </div>

@@ -49,7 +49,7 @@ body {
 .sudoku {
     user-select: none;
     --text-size: calc(var(--square-size) / 1.8);
-    --anno-size: calc(var(--text-size) / 3);
+    --anno-size: calc(var(--text-size) / 2);
     font-size: var(--text-size);
 }
 

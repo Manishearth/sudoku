@@ -35,7 +35,7 @@ class CellSet {
     static deserialize(obj) {
         let set = new CellSet();
         for (let i of obj) {
-            set[i] = true;
+            set.set[i] = true;
         }
         return set;
     }

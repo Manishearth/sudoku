@@ -7,11 +7,21 @@ body {
     margin: 0;
     font-family: sans-serif;
 }
+
+#controls-container {
+    --margin-scale-factor: 22;
+    --margin-size: calc(var(--longbutton-width) / var(--margin-scale-factor));
+    --button-height: calc((var(--longbutton-width) - 3 * var(--margin-size)) / 3);
+}
+
 @media (min-width: 1000px) {
     #sudoku-container {
         --square-size: 54px;
         padding-left: 40px;
         padding-right: 40px;
+    }
+    #controls-container {
+        --longbutton-width: 160px;
     }
 }
 
@@ -25,6 +35,7 @@ body {
         padding-right: var(--padding);
     }
     #controls-container {
+        --longbutton-width: 40vw;
         margin-top: 30px;
     }
 }
@@ -208,19 +219,17 @@ body {
 }
 
 #controls-container {
-    --button-height: 45px;
     display: flex;
     flex-direction: column;
+    font-size: calc(var(--button-height) / 2);
 }
 
-.main-controls > div {
-    margin-left: 10px;
-    margin-right: 10px;
-}
+
 .main-controls {
     display: flex;
     flex-direction: row;
 }
+
 .modes {
     display: flex;
     flex-direction: column;
@@ -229,16 +238,13 @@ body {
 }
 
 .modes .button {
-    padding-left: 30px;
-    padding-right: 30px;
+    width: var(--longbutton-width);
 }
 .buttons-other {
     display: flex;
     flex-flow: column;
     align-items: stretch;
     justify-content: space-between;
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .buttons-other-row {
@@ -264,9 +270,9 @@ body {
     font-weight: 400;
     color: rgb(0, 40, 200);
     border: 1px solid #ddd;
-    border-radius: 7px;
-    margin-top: 7px;
-    margin-left: 7px;
+    border-radius: var(--margin-size);
+    margin-top: var(--margin-size);
+    margin-left: var(--margin-size);
     cursor: pointer;
 }
 
@@ -284,7 +290,7 @@ body {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    width: calc(var(--button-height) * 3 + 28px);
+    width: calc(var(--longbutton-width) + var(--margin-size));
 }
 
 .keypad .cell-container {
@@ -320,7 +326,7 @@ body {
     left: 15%;
     right: 15%;
     bottom: 15%;
-    border-radius: 5px;
+    border-radius: var(--margin-size) / 2;
 }
 
 .keypad .corner {
